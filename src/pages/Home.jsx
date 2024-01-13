@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { serachForShows } from '../api/tvmaze';
 
 const Home = () => {
   const [searchStr, setSearchString] = useState('');
+  const [apiData, setApiData] = useState(null);
+  const [apiError, setApiError] = useState(null);
 
   const onSearchInputChange = e => {
     setSearchString(e.target.value);
@@ -10,13 +13,25 @@ const Home = () => {
   const onSearch = async e => {
     e.preventDefault();
 
-    const response = await fetch(
-      `https://api.tvmaze.com/search/shows?q=${searchStr}`
-    );
-    const body = response.json();
-    console.log(body);
+    try {
+      setApiError(null);
+      const result = await serachForShows(searchStr);
+      setApiData(result);
+    } catch (error) {
+      setApiError(error);
+    }
+  };
 
-    // console.log(e.target[0].value);
+  const renderApidata = () => {
+    if (apiError) {
+      return <div>An error occured: {apiError.message}</div>;
+    }
+
+    if (apiData) {
+      return apiData.map(data => (
+        <div key={data.show.id}>{data.show.name}</div>
+      ));
+    } else return null;
   };
 
   return (
@@ -30,6 +45,7 @@ const Home = () => {
         />
         <button type="submit">Search</button>
       </form>
+      <div>{renderApidata()}</div>
     </div>
   );
 };
