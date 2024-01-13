@@ -7,3 +7,5 @@ const apiGET = async queryString => {
 };
 
 export const serachForShows = query => apiGET(`/search/shows?q=${query}`);
+
+export const serachForActors = query => apiGET(`/search/people?q=${query}`);
