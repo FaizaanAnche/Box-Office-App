@@ -11,6 +11,7 @@ const ShowsGrid = ({ shows }) => {
             //check if image is not null
             data.show.image ? data.show.image.medium : '/not_found_image.png'
           }
+          id={data.show.id}
           summary={data.show.summary}
         />
       ))}
